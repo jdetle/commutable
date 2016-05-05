@@ -15,8 +15,19 @@ function cleanMultiline(item) {
  * @return {string} plain ol' string
  */
 function breakIntoMultiline(item) {
-  // Use positive lookahead regex to split on newline and retain newline char
-  return typeof item === 'string' ? item.split(/(?=\n)/g) : item;
+  if (typeof item === 'string') {
+    const lines = item.split('\n');
+    return Immutable.List(lines)
+      .map((line, index) => {
+        // If this is not the last line, re-add the newline char
+        if (index < lines.length - 1) {
+          return line + '\n';
+        }
+        return line;
+      });
+  } else {
+    return item;
+  }
 }
 
 /**
